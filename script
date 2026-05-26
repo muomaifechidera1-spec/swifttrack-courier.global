@@ -1,0 +1,136 @@
+const trackingData = {
+  "SK2026001": {
+    status: "In Transit",
+    statusClass: "status-transit",
+    origin: "Sandton, Johannesburg, South Africa",
+    destination: "Seoul, South Korea",
+    recipient: "Office of International Admissions & Management",
+    recipientAddr: "#102 Minerva Complex, Hankuk University of Foreign Studies, 107 Imun-ro, Dongdaemun-gu, Seoul 02450, Republic of Korea",
+    service: "Express Document Delivery",
+    contents: "Academic Documents",
+    submitted: "26 May 2026, 12:00 SAST",
+    eta: "28 May 2026 (2-day air transit)",
+    lastUpdate: "Sandton HQ → O.R. Tambo International — Departed",
+    lastTime: "Today, 14:20 SAST",
+    route: [
+      { city: "Sandton", country: "South Africa", state: "done" },
+      { city: "Dubai", country: "UAE", state: "active" },
+      { city: "Seoul (ICN)", country: "South Korea", state: "" }
+    ],
+    lines: ["done", "active"]
+  },
+  "INT4459002": {
+    status: "In Transit",
+    statusClass: "status-transit",
+    origin: "Sandton, Johannesburg, South Africa",
+    destination: "Seoul, South Korea",
+    recipient: "Office of International Admissions & Management",
+    recipientAddr: "#102 Minerva Complex, Hankuk University of Foreign Studies, 107 Imun-ro, Dongdaemun-gu, Seoul 02450, Republic of Korea",
+    service: "Express Document Delivery",
+    contents: "Academic Documents",
+    submitted: "26 May 2026, 12:00 SAST",
+    eta: "28 May 2026 (2-day air transit)",
+    lastUpdate: "Sandton HQ → O.R. Tambo International — Departed",
+    lastTime: "Today, 14:25 SAST",
+    route: [
+      { city: "Sandton", country: "South Africa", state: "done" },
+      { city: "Singapore", country: "Singapore", state: "active" },
+      { city: "Seoul (ICN)", country: "South Korea", state: "" }
+    ],
+    lines: ["done", "active"]
+  },
+  "JBNU2026003": {
+    status: "In Transit",
+    statusClass: "status-transit",
+    origin: "Sandton, Johannesburg, South Africa",
+    destination: "Jeonju-si, South Korea",
+    recipient: "Office of International Affairs — Jeonbuk National University",
+    recipientAddr: "3rd Floor, JBNU International Center, 567 Baekje-daero, Deokjin-gu, Jeonju-si, Jeonbuk-do 54896, Republic of Korea",
+    service: "Express Document Delivery",
+    contents: "Academic Documents",
+    submitted: "26 May 2026, 12:00 SAST",
+    eta: "28 May 2026 (2-day air transit)",
+    lastUpdate: "Sandton HQ → O.R. Tambo International — Departed",
+    lastTime: "Today, 14:31 SAST",
+    route: [
+      { city: "Sandton", country: "South Africa", state: "done" },
+      { city: "Dubai", country: "UAE", state: "active" },
+      { city: "Jeonju", country: "South Korea", state: "" }
+    ],
+    lines: ["done", "active"]
+  }
+};
+ 
+function trackParcel() {
+  const raw = document.getElementById('trackingInput').value.trim().toUpperCase();
+  const resultEl = document.getElementById('result');
+ 
+  if (!raw) {
+    resultEl.innerHTML = `<div class="error-box"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><p>Please enter a tracking number.</p></div>`;
+    return;
+  }
+ 
+  const data = trackingData[raw];
+  if (!data) {
+    resultEl.innerHTML = `<div class="error-box"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><p><strong>${raw}</strong> — Tracking number not found. Please check and try again.</p></div>`;
+    return;
+  }
+ 
+  const routeHtml = data.route.map((stop, i) => {
+    const dotClass = stop.state ? `route-dot ${stop.state}` : 'route-dot';
+    const lineAfter = i < data.route.length - 1
+      ? `<div class="route-line ${data.lines[i]}"></div>`
+      : '';
+    return `<div class="route-stop"><div class="${dotClass}"></div><div class="route-city">${stop.city}</div><div class="route-country">${stop.country}</div></div>${lineAfter}`;
+  }).join('');
+ 
+  resultEl.innerHTML = `
+    <div class="result-box">
+      <div class="result-header">
+        <div>
+          <div class="result-code">Tracking # ${raw}</div>
+          <div class="result-origin">${data.origin} → ${data.destination}</div>
+        </div>
+        <div class="status-badge ${data.statusClass}">${data.status}</div>
+      </div>
+      <div class="route-visual">${routeHtml}</div>
+      <div class="result-details">
+        <div class="detail-cell" style="grid-column: 1 / -1;">
+          <div class="detail-label">Recipient</div>
+          <div class="detail-value" style="font-size:13px; line-height:1.5;">${data.recipient}<br>
+            <span style="font-weight:400; color:#6B6B6B; font-size:12px;">${data.recipientAddr}</span>
+          </div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-label">Last Scan</div>
+          <div class="detail-value" style="font-size:13px;">${data.lastUpdate}</div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-label">Scan Time</div>
+          <div class="detail-value">${data.lastTime}</div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-label">Service</div>
+          <div class="detail-value">${data.service}</div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-label">Contents</div>
+          <div class="detail-value">${data.contents}</div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-label">Submitted</div>
+          <div class="detail-value" style="font-size:13px;">${data.submitted}</div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-label">Estimated Delivery</div>
+          <div class="detail-value">${data.eta}</div>
+        </div>
+      </div>
+    </div>`;
+}
+ 
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('trackingInput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') trackParcel();
+  });
+});
