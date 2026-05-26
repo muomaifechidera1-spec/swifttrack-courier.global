@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SwiftTrack Global Courier</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --yellow: #FFCC00;
+    --yellow-dark: #E6B800;
+    --red: #D40511;
+    --black: #1A1A1A;
+    --gray-900: #1A1A1A;
+    --gray-700: #3D3D3D;
+    --gray-500: #6B6B6B;
+    --gray-300: #C4C4C4;
+    --gray-100: #F5F5F5;
+    --white: #FFFFFF;
+    --font-display: 'Oswald', sans-serif;
+    --font-body: 'Source Sans 3', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--white);
+    color: var(--gray-900);
+    min-height: 100vh;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--gray-900);
+    color: var(--gray-300);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    padding: 6px 0;
+  }
+  .topbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .topbar a { color: var(--gray-300); text-decoration: none; }
+  .topbar a:hover { color: var(--yellow); }
+  .topbar-links { display: flex; gap: 20px; }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--yellow);
+    padding: 0;
+    border-bottom: 4px solid var(--yellow-dark);
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo-icon svg { width: 28px; height: 28px; fill: white; }
+  .logo-text {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--gray-900);
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .logo-text span {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    font-family: var(--font-body);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-700);
+    margin-top: 2px;
+  }
+  nav { display: flex; gap: 4px; }
+  nav a {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-900);
+    text-decoration: none;
+    padding: 8px 14px;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.15s;
+    letter-spacing: 0.02em;
+  }
+  nav a:hover, nav a.active { border-bottom-color: var(--gray-900); }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--gray-900);
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    right: -60px;
+    top: -60px;
+    width: 400px;
+    height: 400px;
+    background: var(--yellow);
+    opacity: 0.04;
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    left: 40%;
+    bottom: -80px;
+    width: 300px;
+    height: 300px;
+    background: var(--red);
+    opacity: 0.06;
+    border-radius: 50%;
+  }
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-left h1 {
+    font-family: var(--font-display);
+    font-size: 52px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero-left h1 span { color: var(--yellow); }
+  .hero-left p {
+    color: var(--gray-300);
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 440px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 36px;
+  }
+  .stat { border-left: 3px solid var(--yellow); padding-left: 12px; }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
+
+  /* ── TRACKING CARD ── */
+  .track-card {
+    background: var(--white);
+    padding: 36px;
+  }
+  .track-card h2 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gray-900);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 20px;
+  }
+  .track-input-row {
+    display: flex;
+    gap: 0;
+    border: 2px solid var(--gray-300);
+    transition: border-color 0.2s;
+  }
+  .track-input-row:focus-within { border-color: var(--yellow); }
+  .track-input-row input {
+    flex: 1;
+    padding: 14px 16px;
+    font-family: var(--font-display);
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    border: none;
+    outline: none;
+    color: var(--gray-900);
+    text-transform: uppercase;
+  }
+  .track-input-row input::placeholder {
+    color: var(--gray-300);
+    font-family: var(--font-body);
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 14px;
+  }
+  .track-btn {
+    background: var(--yellow);
+    border: none;
+    padding: 14px 24px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--gray-900);
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .track-btn:hover { background: var(--yellow-dark); }
+  .track-btn svg { width: 16px; height: 16px; }
+
+  .demo-codes {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+  .demo-codes span {
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--gray-700);
+    cursor: pointer;
+    border-bottom: 1px dotted var(--gray-300);
+    transition: color 0.15s;
+  }
+  .demo-codes span:hover { color: var(--red); }
+
+  /* ── RESULT PANEL ── */
+  #result { margin-top: 24px; }
+
+  .result-box {
+    border-top: 4px solid var(--yellow);
+    background: var(--gray-100);
+    padding: 24px;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .result-code {
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .result-origin {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-700);
+  }
+  .status-badge {
+    padding: 6px 14px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .status-transit { background: var(--yellow); color: var(--gray-900); }
+  .status-delivered { background: #1A7A4A; color: white; }
+
+  .route-visual {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 20px 0;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .route-stop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+    text-align: center;
+  }
+  .route-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--gray-300);
+    border: 2px solid var(--white);
+    outline: 2px solid var(--gray-300);
+    margin-bottom: 8px;
+  }
+  .route-dot.active { background: var(--yellow); outline-color: var(--yellow); }
+  .route-dot.done { background: #1A7A4A; outline-color: #1A7A4A; }
+  .route-line {
+    flex: 1;
+    height: 2px;
+    background: var(--gray-300);
+    min-width: 24px;
+    margin-bottom: 28px;
+    position: relative;
+  }
+  .route-line.done { background: #1A7A4A; }
+  .route-line.active { background: var(--yellow); }
+  .route-city {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-700);
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+  }
+  .route-country {
+    font-size: 10px;
+    color: var(--gray-500);
+    letter-spacing: 0.02em;
+  }
+
+  .result-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--gray-300);
+    border: 1px solid var(--gray-300);
+    margin-top: 16px;
+  }
+  .detail-cell {
+    background: var(--white);
+    padding: 14px 16px;
+  }
+  .detail-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gray-500);
+    margin-bottom: 4px;
+  }
+  .detail-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-900);
+  }
+
+  .error-box {
+    background: #FFF3F3;
+    border-left: 4px solid var(--red);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideIn 0.3s ease;
+  }
+  .error-box svg { width: 20px; height: 20px; flex-shrink: 0; fill: var(--red); }
+  .error-box p { font-size: 14px; color: var(--gray-700); }
+  .error-box strong { color: var(--gray-900); }
+
+  /* ── SERVICES STRIP ── */
+  .services {
+    background: var(--gray-100);
+    border-top: 1px solid var(--gray-300);
+    padding: 48px 24px;
+  }
+  .services-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .section-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--gray-900);
+    margin-bottom: 36px;
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--gray-300);
+    border: 1px solid var(--gray-300);
+  }
+  .service-item {
+    background: var(--white);
+    padding: 28px 24px;
+    transition: background 0.15s;
+  }
+  .service-item:hover { background: var(--gray-900); }
+  .service-item:hover .service-title { color: var(--yellow); }
+  .service-item:hover .service-desc { color: var(--gray-300); }
+  .service-item:hover .service-icon { border-color: var(--yellow); }
+  .service-item:hover .service-icon svg { fill: var(--yellow); }
+  .service-icon {
+    width: 44px;
+    height: 44px;
+    border: 2px solid var(--gray-900);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    transition: border-color 0.15s;
+  }
+  .service-icon svg { width: 22px; height: 22px; fill: var(--gray-900); transition: fill 0.15s; }
+  .service-title {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--gray-900);
+    margin-bottom: 8px;
+    transition: color 0.15s;
+  }
+  .service-desc {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.5;
+    transition: color 0.15s;
+  }
+
+  /* ── ROUTE HIGHLIGHT ── */
+  .route-highlight {
+    background: var(--gray-900);
+    padding: 48px 24px;
+  }
+  .route-highlight-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .route-highlight .section-title { color: var(--white); margin-bottom: 16px; }
+  .route-highlight p { color: var(--gray-300); font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
+  .route-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,204,0,0.12);
+    border: 1px solid rgba(255,204,0,0.3);
+    color: var(--yellow);
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    padding: 6px 14px;
+    text-transform: uppercase;
+    margin-right: 8px;
+    margin-bottom: 8px;
+  }
+  .route-map {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 28px;
+  }
+  .route-map-title {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .route-path {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .route-node {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .route-node:last-child { border-bottom: none; }
+  .node-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,204,0,0.15);
+    border: 2px solid var(--yellow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--yellow);
+  }
+  .node-info { flex: 1; }
+  .node-city { font-weight: 600; color: var(--white); font-size: 14px; }
+  .node-role { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+  .node-arrow {
+    font-size: 12px;
+    color: var(--gray-500);
+    padding-left: 52px;
+    margin: -4px 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #111;
+    padding: 40px 24px 24px;
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 24px;
+  }
+  .footer-brand .logo-text { color: var(--white); font-size: 22px; }
+  .footer-brand .logo-text span { color: var(--gray-500); }
+  .footer-brand p { color: var(--gray-500); font-size: 13px; margin-top: 12px; line-height: 1.6; }
+  .footer-col h4 {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 14px;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 13px;
+    color: var(--gray-500);
+    text-decoration: none;
+    margin-bottom: 8px;
+    transition: color 0.15s;
+  }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--gray-500);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .footer-badges { display: flex; gap: 12px; }
+  .badge {
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--gray-300);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .topbar-inner { flex-direction: column; gap: 4px; text-align: center; padding: 8px 16px; }
+    .topbar-links { gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+    .header-inner { padding: 0 16px; height: 60px; }
+    .logo-text { font-size: 20px; }
+    .logo-icon { width: 38px; height: 38px; }
+    .logo-icon svg { width: 22px; height: 22px; }
+    nav { display: none; }
+
+    .hero { padding: 32px 16px 40px; }
+    .hero-inner { grid-template-columns: 1fr; gap: 28px; }
+    .hero-left h1 { font-size: 32px; }
+    .hero-left p { font-size: 14px; }
+    .hero-stats { gap: 16px; flex-wrap: wrap; }
+    .stat-num { font-size: 22px; }
+
+    .track-card { padding: 24px 16px; }
+    .track-card h2 { font-size: 18px; }
+    .track-input-row { flex-direction: column; border: none; gap: 8px; }
+    .track-input-row input { width: 100%; border: 2px solid var(--gray-300); padding: 14px 16px; font-size: 15px; }
+    .track-input-row:focus-within { border: none; }
+    .track-input-row input:focus { border-color: var(--yellow); outline: none; }
+    .track-btn { width: 100%; justify-content: center; padding: 14px; font-size: 15px; }
+    .demo-codes { font-size: 11px; }
+
+    .result-box { padding: 16px; }
+    .result-details { grid-template-columns: 1fr; }
+    .result-header { flex-direction: column; gap: 10px; }
+    .route-visual { gap: 0; padding: 8px 0; }
+    .route-stop { min-width: 64px; }
+    .route-city { font-size: 10px; }
+    .route-country { font-size: 9px; }
+
+    .services { padding: 32px 16px; }
+    .section-title { font-size: 24px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .service-item { padding: 20px 16px; }
+
+    .route-highlight { padding: 32px 16px; }
+    .route-highlight-inner { grid-template-columns: 1fr; gap: 24px; }
+    .route-highlight .section-title { font-size: 24px; }
+    .route-map { padding: 20px 16px; }
+    .node-city { font-size: 13px; }
+    .node-role { font-size: 11px; }
+    .route-tag { font-size: 11px; padding: 5px 10px; margin-bottom: 6px; }
+
+    footer { padding: 32px 16px 20px; }
+    .footer-top { grid-template-columns: 1fr; gap: 24px; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .footer-badges { flex-wrap: wrap; gap: 8px; }
+  }
+
+  @media (max-width: 400px) {
+    .hero-left h1 { font-size: 26px; }
+    .hero-stats { flex-direction: column; gap: 12px; }
+    .stat { border-left: 3px solid var(--yellow); }
+    .track-card { padding: 20px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div>SwiftTrack Global Courier — Sandton, Johannesburg</div>
+    <div class="topbar-links">
+      <a href="#">Customer Service</a>
+      <a href="#">ZA: +27 11 000 0000</a>
+      <a href="#">Login</a>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M1 3h15v13H1V3zm15 5h4l3 3v5h-7V8zM6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm13 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>
+      </div>
+      <div class="logo-text">
+        SwiftTrack
+        <span>Global Courier</span>
+      </div>
+    </div>
+    <nav>
+      <a href="#" class="active">Track</a>
+      <a href="#">Services</a>
+      <a href="#">Routes</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <h1>Express <span>Worldwide</span> Delivery</h1>
+      <p>From Johannesburg to Seoul and everywhere between — SwiftTrack moves your parcels across 220 countries with speed, precision, and complete visibility.</p>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">220+</div>
+          <div class="stat-label">Countries</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">2 Days</div>
+          <div class="stat-label">Korea Transit</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">99.6%</div>
+          <div class="stat-label">On-Time Rate</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="track-card">
+      <h2>Track a Parcel</h2>
+      <div class="track-input-row">
+        <input type="text" id="trackingInput" placeholder="Enter your tracking number" maxlength="20" oninput="this.value = this.value.toUpperCase()">
+        <button class="track-btn" onclick="trackParcel()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Track
+        </button>
+      </div>
+      <div class="demo-codes">
+        Example format: <span style="font-family:var(--font-display); font-size:12px; letter-spacing:0.06em; color:var(--gray-700);">SWT-00000-ZA</span> &nbsp;·&nbsp; <span style="font-family:var(--font-display); font-size:12px; letter-spacing:0.06em; color:var(--gray-700);">SWT-00000-KR</span>
+      </div>
+      <div id="result"></div>
+    </div>
+  </div>
+</section>
+
+<section class="services">
+  <div class="services-inner">
+    <div class="section-label">What We Offer</div>
+    <div class="section-title">Our Services</div>
+    <div class="services-grid">
+      <div class="service-item">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="service-title">Document Delivery</div>
+        <div class="service-desc">Secure, express delivery of academic and legal documents to universities and institutions worldwide.</div>
+      </div>
+      <div class="service-item">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="service-title">Economy Shipping</div>
+        <div class="service-desc">Reliable and cost-effective delivery for non-urgent parcels worldwide.</div>
+      </div>
+      <div class="service-item">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="service-title">Freight Solutions</div>
+        <div class="service-desc">Heavy cargo and bulk freight handled with specialist equipment and routing.</div>
+      </div>
+      <div class="service-item">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="service-title">Secure Parcels</div>
+        <div class="service-desc">High-value items shipped with enhanced security, insurance, and chain of custody.</div>
+      </div>
+      <div class="service-item">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div class="service-title">International Routes</div>
+        <div class="service-desc">Direct connections to South Korea, Asia-Pacific, Europe, and the Americas.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="route-highlight">
+  <div class="route-highlight-inner">
+    <div>
+      <div class="section-label">Featured Corridor</div>
+      <div class="section-title">South Africa → South Korea</div>
+      <p>Departing from our Sandton headquarters, documents reach South Korean universities in just 2 days via air freight — with two optimised routing options, full live tracking, and guaranteed delivery windows for time-sensitive admissions submissions.</p>
+      <div>
+        <div class="route-tag">● SDT → DXB → ICN (Seoul)</div>
+        <div class="route-tag">● SDT → SIN → ICN (Seoul)</div>
+        <div class="route-tag">● SDT → DXB → Jeonju</div>
+      </div>
+    </div>
+    <div class="route-map">
+      <div class="route-map-title">Active University Destinations</div>
+      <div class="route-path">
+        <div class="route-node">
+          <div class="node-circle">A</div>
+          <div class="node-info">
+            <div class="node-city">Hankuk University of Foreign Studies</div>
+            <div class="node-role">Office of International Admissions — Seoul 02450</div>
+          </div>
+        </div>
+        <div class="node-arrow" style="padding-left:0; margin: 8px 0;">·</div>
+        <div class="route-node">
+          <div class="node-circle">B</div>
+          <div class="node-info">
+            <div class="node-city">Jeonbuk National University (JBNU)</div>
+            <div class="node-role">Office of International Affairs — Jeonju-si 54896</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo-text">SwiftTrack<span>Global Courier</span></div>
+        <p>Based in Sandton, Johannesburg — connecting South Africa to the world since 2009. Fast, reliable, and fully tracked from door to door.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="#">Express Delivery</a>
+        <a href="#">Economy Shipping</a>
+        <a href="#">Freight</a>
+        <a href="#">Customs Clearance</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+        <a href="#">Partners</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Track a Parcel</a>
+        <a href="#">FAQ</a>
+        <a href="#">Claims</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 SwiftTrack Global Courier. All rights reserved.</div>
+      <div class="footer-badges">
+        <div class="badge">ISO 9001</div>
+        <div class="badge">IATA Certified</div>
+        <div class="badge">Korea Route Enabled</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const trackingData = {
+  "SK2026001": {
+    status: "In Transit",
+    statusClass: "status-transit",
+    origin: "Sandton, Johannesburg, South Africa",
+    destination: "Seoul, South Korea",
+    recipient: "Office of International Admissions & Management",
+    recipientAddr: "#102 Minerva Complex, Hankuk University of Foreign Studies, 107 Imun-ro, Dongdaemun-gu, Seoul 02450, Republic of Korea",
+    service: "Express Document Delivery",
+    contents: "Academic Documents",
+    submitted: "26 May 2026, 12:00 SAST",
+    eta: "28 May 2026 (2-day air transit)",
+    lastUpdate: "Sandton HQ → O.R. Tambo International — Departed",
+    lastTime: "Today, 14:20 SAST",
+    route: [
+      { city: "Sandton", country: "South Africa", state: "done" },
+      { city: "Dubai", country: "UAE", state: "active" },
+      { city: "Seoul (ICN)", country: "South Korea", state: "" }
+    ],
+    lines: ["done", "active"]
+  },
+  "INT4459002": {
+    status: "In Transit",
+    statusClass: "status-transit",
+    origin: "Sandton, Johannesburg, South Africa",
+    destination: "Seoul, South Korea",
+    recipient: "Office of International Admissions & Management",
+    recipientAddr: "#102 Minerva Complex, Hankuk University of Foreign Studies, 107 Imun-ro, Dongdaemun-gu, Seoul 02450, Republic of Korea",
+    service: "Express Document Delivery",
+    contents: "Academic Documents",
+    submitted: "26 May 2026, 12:00 SAST",
+    eta: "28 May 2026 (2-day air transit)",
+    lastUpdate: "Sandton HQ → O.R. Tambo International — Departed",
+    lastTime: "Today, 14:25 SAST",
+    route: [
+      { city: "Sandton", country: "South Africa", state: "done" },
+      { city: "Singapore", country: "Singapore", state: "active" },
+      { city: "Seoul (ICN)", country: "South Korea", state: "" }
+    ],
+    lines: ["done", "active"]
+  },
+  "JBNU2026003": {
+    status: "In Transit",
+    statusClass: "status-transit",
+    origin: "Sandton, Johannesburg, South Africa",
+    destination: "Jeonju-si, South Korea",
+    recipient: "Office of International Affairs — Jeonbuk National University",
+    recipientAddr: "3rd Floor, JBNU International Center, 567 Baekje-daero, Deokjin-gu, Jeonju-si, Jeonbuk-do 54896, Republic of Korea",
+    service: "Express Document Delivery",
+    contents: "Academic Documents",
+    submitted: "26 May 2026, 12:00 SAST",
+    eta: "28 May 2026 (2-day air transit)",
+    lastUpdate: "Sandton HQ → O.R. Tambo International — Departed",
+    lastTime: "Today, 14:31 SAST",
+    route: [
+      { city: "Sandton", country: "South Africa", state: "done" },
+      { city: "Dubai", country: "UAE", state: "active" },
+      { city: "Jeonju", country: "South Korea", state: "" }
+    ],
+    lines: ["done", "active"]
+  }
+};
+
+function useCode(code) {
+  document.getElementById('trackingInput').value = code;
+  trackParcel();
+}
+
+function trackParcel() {
+  const raw = document.getElementById('trackingInput').value.trim().toUpperCase();
+  const resultEl = document.getElementById('result');
+
+  if (!raw) {
+    resultEl.innerHTML = `<div class="error-box"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><p>Please enter a tracking number.</p></div>`;
+    return;
+  }
+
+  const data = trackingData[raw];
+  if (!data) {
+    resultEl.innerHTML = `<div class="error-box"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><p><strong>${raw}</strong> — Tracking number not found. Please check and try again.</p></div>`;
+    return;
+  }
+
+  const routeHtml = data.route.map((stop, i) => {
+    const dotClass = stop.state ? `route-dot ${stop.state}` : 'route-dot';
+    const lineAfter = i < data.route.length - 1
+      ? `<div class="route-line ${data.lines[i]}"></div>`
+      : '';
+    return `<div class="route-stop"><div class="${dotClass}"></div><div class="route-city">${stop.city}</div><div class="route-country">${stop.country}</div></div>${lineAfter}`;
+  }).join('');
+
+  resultEl.innerHTML = `
+    <div class="result-box">
+      <div class="result-header">
+        <div>
+          <div class="result-code">Tracking # ${raw}</div>
+          <div class="result-origin">${data.origin} → ${data.destination}</div>
+        </div>
+        <div class="status-badge ${data.statusClass}">${data.status}</div>
+      </div>
+      <div class="route-visual">${routeHtml}</div>
+      <div class="result-details">
+        <div class="detail-cell" style="grid-column: 1 / -1;">
+          <div class="detail-label">Recipient</div>
+          <div class="detail-value" style="font-size:13px; line-height:1.5;">${data.recipient}<br><span style="font-weight:400; color:#6B6B6B; font-size:12px;">${data.recipientAddr}</span></div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-label">Last Scan</div>
+          <div class="detail-value" style="font-size:13px;">${data.lastUpdate}</div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-label">Scan Time</div>
+          <div class="detail-value">${data.lastTime}</div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-label">Service</div>
+          <div class="detail-value">${data.service}</div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-label">Contents</div>
+          <div class="detail-value">${data.contents}</div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-label">Submitted</div>
+          <div class="detail-value" style="font-size:13px;">${data.submitted}</div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-label">Estimated Delivery</div>
+          <div class="detail-value">${data.eta}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+document.getElementById('trackingInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') trackParcel();
+});
+</script>
+</body>
+</html>
